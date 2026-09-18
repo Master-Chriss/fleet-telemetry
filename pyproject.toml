@@ -1,0 +1,20 @@
+[project]
+name = "fleet-telemetry"
+version = "0.1.0"
+description = "Production-grade IoT Fleet Telemetry & Monitoring System"
+readme = "README.md"
+authors = [
+    { name = "Master_Chriss", email = "masterchriss001@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "asyncpg>=0.31.0",
+    "fastapi>=0.141.1",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy>=2.0.54",
+    "uvicorn>=0.53.0",
+]
+
+# This tells uv to treat this as a standalone deployment, bypassing local wheel builds
+[tool.uv]
+package = false
