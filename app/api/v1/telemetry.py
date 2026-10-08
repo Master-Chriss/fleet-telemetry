@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, BackgroundTasks, status
+from fastapi import APIRouter, Depends, BackgroundTasks, status, Security
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.api.deps import get_db
+from app.api.deps import get_db, validate_api_key
 from app.schemas.telemetry import TelemetryIngestCreate
 from app.models.telemetry import TelemetryLog
 from app.services.websocket import socket_manager
@@ -49,10 +49,11 @@ async def check_vehicle_thresholds(payload: TelemetryIngestCreate) -> None:
 async def ingest_device_telemetry(
     payload: TelemetryIngestCreate,
     background_tasks: BackgroundTasks,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    api_key: str = Security(validate_api_key)  # 🔥 Secure Guardrail Added
 ):
     """
-    Accepts high-frequency metrics from delivery vehicles.
+    Accepts high-frequency metrics from validated delivery vehicles.
     Saves to the database asynchronously and handles alerts via background workers.
     """
     # 1. Transform incoming validation schema into our database record
